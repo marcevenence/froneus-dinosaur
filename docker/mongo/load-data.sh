@@ -1,8 +1,23 @@
 #!/bin/bash
 
 # Ejecuta un insertMany en la base dinosaurs
-docker exec -i mongo mongosh -u mongoexpress -p secret123 --authenticationDatabase admin <<EOF
-use dinosaurs_db
+docker exec -i mongo mongosh -u mongoADMIN -p mongoPASS --authenticationDatabase admin <<EOF
+
+db = db.getSiblingDB('dinosaurs_db');
+
+db.createUser({
+  user: 'froneus',
+  pwd: 'secret123',
+  roles: [
+    {
+      role: 'readWrite',
+      db: 'dinosaurs_db',
+    },
+  ],
+});
+
+db.createCollection('dinosaurs');
+
 db.dinosaurs.insertMany([
   {
       name: "Tyrannosaurus Rex",

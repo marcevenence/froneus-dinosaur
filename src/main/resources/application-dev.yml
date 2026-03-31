@@ -1,0 +1,14 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://froneus:secret123@localhost:27017/dinosaurs_db
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: secret
+  output:
+    ansi:
+      enabled: ALWAYS
+server:
+  port: 8080
