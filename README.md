@@ -35,7 +35,7 @@ This project is a robust microservice developed in **Spring Boot 3.5.9** for din
 
 ## ⚙️ Local Environment Setup
 
-### 1. Environment Variables
+### 1. Variables and Directory Setup
 Create or edit the `docker/.env` file with the following credentials:
 
 ```env
@@ -48,6 +48,13 @@ MONGO_DATABASE=dinosaur_db
 # RabbitMQ Config
 RABBITMQ_USER=admin
 RABBITMQ_PASS=secret
+```
+
+**Important**: Before running Docker Compose, ensure the persistence directories exist to avoid permission issues:
+
+```bash
+# From the project root
+mkdir -p docker/data/mongo docker/data/rabbitmq
 ```
 
 ### 2. Deployment with Docker Compose
