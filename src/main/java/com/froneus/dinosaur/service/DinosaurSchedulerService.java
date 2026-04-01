@@ -17,6 +17,7 @@ import java.util.List;
 public class DinosaurSchedulerService {
 
     private final DinosaurRepository dinosaurRepository;
+    private final RabbitMQSenderService rabbitMQSenderService;
 
     @Scheduled(cron = "${scheduler.endangered.cron}")
     public void updateEndangeredStatus() {
@@ -32,6 +33,7 @@ public class DinosaurSchedulerService {
                 dinosaur.setStatus(Status.ENDANGERED);
                 dinosaurRepository.save(dinosaur);
                 log.info("Dinosaur {} (ID: {}) changed to ENDANGERED status.", dinosaur.getName(), dinosaur.getId());
+                rabbitMQSenderService.sendStatusMessage(dinosaur.getId(), dinosaur.getStatus());
             }
         }
     }
@@ -47,6 +49,7 @@ public class DinosaurSchedulerService {
             dinosaur.setStatus(Status.EXTINCT);
             dinosaurRepository.save(dinosaur);
             log.info("Dinosaur {} (ID: {}) changed to EXTINCT status.", dinosaur.getName(), dinosaur.getId());
+            rabbitMQSenderService.sendStatusMessage(dinosaur.getId(), dinosaur.getStatus());
         }
     }
 }

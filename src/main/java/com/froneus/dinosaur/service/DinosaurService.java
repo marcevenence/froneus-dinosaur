@@ -19,6 +19,7 @@ public class DinosaurService {
 
     private final DinosaurRepository dinosaurRepository;
     private final DinosaurMapper dinosaurMapper;
+    private final RabbitMQSenderService rabbitMQSenderService;
 
     public List<DinosaurResponse> getAllDinosaurs() {
         return dinosaurMapper.toDinosaurResponseList(dinosaurRepository.findAll());
@@ -53,7 +54,14 @@ public class DinosaurService {
         Dinosaur dinosaur = dinosaurMapper.toEntity(id, request);
         validateDinosaurDates(dinosaur);
 
-        return dinosaurMapper.toDTO(dinosaurRepository.save(dinosaur));
+        dinosaurRepository.save(dinosaur);
+
+        // Send message if Status changes
+        if (!existingDinosaur.getStatus().equals(request.getStatus())) {
+            rabbitMQSenderService.sendStatusMessage(dinosaur.getId(), dinosaur.getStatus());
+        }
+
+        return dinosaurMapper.toDTO(dinosaur);
     }
 
     public void deleteDinosaur(String id) {
