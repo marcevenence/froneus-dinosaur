@@ -1,0 +1,17 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://froneus:secret123@localhost:27017/dinosaurs_db_test
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: secret
+
+# Deshabilitar schedulers en tests para evitar ejecuciones no deseadas
+scheduler:
+  endangered:
+    cron: "-" # Deshabilita el scheduler
+  extinct:
+    cron: "-" # Deshabilita el scheduler
