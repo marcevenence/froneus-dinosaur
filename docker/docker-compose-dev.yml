@@ -1,25 +1,4 @@
 services:
-  dinosaur-app:
-    build:
-      context: ..
-      dockerfile: Dockerfile
-    container_name: dinosaur-app
-    restart: always
-    ports:
-      - "8099:8080"
-    environment:
-      - SPRING_PROFILES_ACTIVE=prod
-      - SPRING_DATA_MONGODB_URI=mongodb://${MONGO_USER}:${MONGO_PASS}@mongo:${MONGO_PORT}/${MONGO_DATABASE}
-      - SPRING_RABBITMQ_HOST=rabbitmq
-      - SPRING_RABBITMQ_PORT=${RABBIT_PORT}
-      - SPRING_RABBITMQ_USERNAME=${RABBITMQ_USER}
-      - SPRING_RABBITMQ_PASSWORD=${RABBITMQ_PASS}
-    depends_on:
-      mongo:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-
   mongo:
     image: mongo:8.2
     container_name: mongo
