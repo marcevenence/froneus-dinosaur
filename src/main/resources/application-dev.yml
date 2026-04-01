@@ -12,3 +12,9 @@ spring:
       enabled: ALWAYS
 server:
   port: 8080
+
+scheduler:
+  endangered:
+    cron: "0 */1 * * * *"
+  extinct:
+    cron: "0 */1 * * * *"

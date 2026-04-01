@@ -5,3 +5,9 @@ spring:
     name: @project.artifactId@
   profiles:
     active: dev
+
+scheduler:
+  endangered:
+    cron: "0 */10 * * * *"
+  extinct:
+    cron: "0 */10 * * * *"
