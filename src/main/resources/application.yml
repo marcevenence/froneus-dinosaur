@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: @project.artifactId@
+  service:
+    name: @project.artifactId@
+  profiles:
+    active: dev
+  rabbitmq:
+    template:
+      retry:
+        enabled: true
+        initial-interval: 1000ms
+        max-attempts: 3
+        max-interval: 10000ms
+        multiplier: 2.0
+
+scheduler:
+  endangered:
+    cron: "0 */10 * * * *"
+  extinct:
+    cron: "0 */10 * * * *"
+
+rabbitmq:
+  exchange: "dinosaur.exchange"
+  queue: "dinosaur.status.queue"
+  routing-key: "dinosaur.status.routing.key"
