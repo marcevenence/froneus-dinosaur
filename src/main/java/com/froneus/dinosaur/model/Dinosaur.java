@@ -33,9 +33,9 @@ public class Dinosaur {
     private LocalDateTime discoveryDate;
 
     @NotNull(message = "ExtinctionDate date is mandatory")
+    @Indexed
     private LocalDateTime extinctionDate;
 
     @NotNull(message = "Status is mandatory")
-    @Indexed
     private Status status;
 }

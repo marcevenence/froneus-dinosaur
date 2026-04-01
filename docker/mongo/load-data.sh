@@ -20,7 +20,7 @@ db.createCollection('dinosaurs');
 
 // indexes
 db.dinosaurs.createIndex({ name: 1 }, { unique: true });
-db.dinosaurs.createIndex({ status: 1 });
+db.dinosaurs.createIndex({ extinctionDate: 1 });
 
 db.dinosaurs.insertMany([
   {
