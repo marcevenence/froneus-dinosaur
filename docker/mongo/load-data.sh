@@ -18,8 +18,13 @@ db.createUser({
 
 db.createCollection('dinosaurs');
 
+// indexes
+db.dinosaurs.createIndex({ name: 1 }, { unique: true });
+db.dinosaurs.createIndex({ status: 1 });
+
 db.dinosaurs.insertMany([
   {
+      _id: ObjectId('69cc0a3b3ad0e659fad805db'),
       name: "Tyrannosaurus Rex",
       species: "Theropod",
       discoveryDate: ISODate("1902-01-01T23:59:59Z"),

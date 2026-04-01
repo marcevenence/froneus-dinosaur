@@ -1,6 +1,7 @@
 package com.froneus.dinosaur.service;
 
 import com.froneus.dinosaur.dto.CreateDinosaurRequest;
+import com.froneus.dinosaur.dto.DinosaurResponse;
 import com.froneus.dinosaur.dto.UpdateDinosaurRequest;
 import com.froneus.dinosaur.exception.ResourceNotFoundException;
 import com.froneus.dinosaur.mapper.DinosaurMapper;
@@ -19,27 +20,27 @@ public class DinosaurService {
     private final DinosaurRepository dinosaurRepository;
     private final DinosaurMapper dinosaurMapper;
 
-    public List<Dinosaur> getAllDinosaurs() {
-        return dinosaurRepository.findAll();
+    public List<DinosaurResponse> getAllDinosaurs() {
+        return dinosaurMapper.toDinosaurResponseList(dinosaurRepository.findAll());
     }
 
-    public Dinosaur getDinosaurById(String id) {
-        return dinosaurRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Dinosaur not found with id: " + id));
+    public DinosaurResponse getDinosaurById(String id) {
+        return dinosaurMapper.toDTO(dinosaurRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Dinosaur not found with id: " + id)));
     }
 
-    public Dinosaur createDinosaur(CreateDinosaurRequest request) {
+    public DinosaurResponse createDinosaur(CreateDinosaurRequest request) {
         Dinosaur dinosaur = dinosaurMapper.toEntity(request);
 
         validateDinosaurDates(dinosaur);
         validateUniqueName(dinosaur.getName());
 
         dinosaur.setStatus(Status.ALIVE); // Initial status must be ALIVE
-        return dinosaurRepository.save(dinosaur);
+        return dinosaurMapper.toDTO(dinosaurRepository.save(dinosaur));
     }
 
-    public Dinosaur updateDinosaur(String id, UpdateDinosaurRequest request) {
-        Dinosaur existingDinosaur = getDinosaurById(id);
+    public DinosaurResponse updateDinosaur(String id, UpdateDinosaurRequest request) {
+        DinosaurResponse existingDinosaur = getDinosaurById(id);
 
         if (Status.EXTINCT.equals(existingDinosaur.getStatus())) {
             throw new IllegalArgumentException("It is not possible to modify an EXTINCT dinosaur.");
@@ -49,15 +50,17 @@ public class DinosaurService {
             validateUniqueName(request.getName());
         }
 
-        dinosaurMapper.toEntity(request, existingDinosaur);
-        validateDinosaurDates(existingDinosaur);
+        Dinosaur dinosaur = dinosaurMapper.toEntity(id, request);
+        validateDinosaurDates(dinosaur);
 
-        return dinosaurRepository.save(existingDinosaur);
+        return dinosaurMapper.toDTO(dinosaurRepository.save(dinosaur));
     }
 
     public void deleteDinosaur(String id) {
-        Dinosaur existingDinosaur = getDinosaurById(id);
-        dinosaurRepository.delete(existingDinosaur);
+        if (!dinosaurRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Dinosaur not found with id: " + id);
+        }
+        dinosaurRepository.deleteById(id);
     }
 
     /**

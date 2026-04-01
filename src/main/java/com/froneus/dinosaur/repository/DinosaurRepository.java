@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface DinosaurRepository extends MongoRepository<Dinosaur, String> {
     Optional<Dinosaur> findByName(String name);
     boolean existsByName(String name);
+    boolean existsById(String id);
 }
