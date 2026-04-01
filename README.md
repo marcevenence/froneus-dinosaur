@@ -50,13 +50,6 @@ RABBITMQ_USER=admin
 RABBITMQ_PASS=secret
 ```
 
-**Important**: Before running Docker Compose, ensure the persistence directories exist to avoid permission issues:
-
-```bash
-# From the project root
-mkdir -p docker/data/mongo docker/data/rabbitmq
-```
-
 ### 2. Deployment with Docker Compose
 
 The project offers two Docker configurations depending on your needs:
@@ -90,10 +83,24 @@ This command builds the **App** image and starts all services.
 
 ---
 
-## 💾 Data Initialization and Population
+## 💾 Data Initialization and Automation
 
-To load initial data and configure the necessary indexes (`unique name` and `status`), run the load script once the containers are up:
+### Automatic Database Setup
+The system is configured to automatically initialize MongoDB using the script at `docker/mongo/init.js` the **first time** the database starts. This script:
+1. Creates the application database (`dinosaurs_db`).
+2. Creates the application user (`froneus`) with proper roles.
+3. Creates the `dinosaurs` collection.
+4. Sets up unique indexes for the `name` field and an index for `status`.
 
+**Note**: If you want to force the initialization script to run again, you must delete the existing data volume:
+```bash
+# From the docker/ folder
+docker compose down -v
+docker compose up -d
+```
+
+### Manual Data Population
+To load extra sample data after the containers are up, run the load script:
 ```bash
 # From the project root
 chmod +x docker/mongo/load-data.sh
