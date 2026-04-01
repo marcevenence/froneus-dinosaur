@@ -40,14 +40,14 @@ Create or edit the `docker/.env` file with the following credentials:
 
 ```env
 # MongoDB Config
-MONGO_PORT=XXX
-MONGO_ROOT_USER=XXX
-MONGO_ROOT_PASS=XXX
-MONGO_DATABASE=XXX
+MONGO_PORT=27017
+MONGO_ROOT_USER=root
+MONGO_ROOT_PASS=example
+MONGO_DATABASE=dinosaur_db
 
 # RabbitMQ Config
-RABBITMQ_USER=XXX
-RABBITMQ_PASS=XXX
+RABBITMQ_USER=admin
+RABBITMQ_PASS=secret
 ```
 
 ### 2. Deployment with Docker Compose
